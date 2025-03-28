@@ -1,17 +1,11 @@
-const head = document.querySelector('head');
-const monseratFontLinks = `<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"></link>;`;
-head.insertAdjacentHTML('beforeEnd', monseratFontLinks);
-
 import flatpickr from 'flatpickr';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 import 'flatpickr/dist/flatpickr.min.css';
 
-let userSelectedDate = null;
+let userSelectedDate;
 const dateInput = document.querySelector('#datetime-picker');
-dateInput.classList.add('timer-input');
 const buttonStart = document.querySelector('button[data-start]');
-buttonStart.classList.add('button-start');
 const days = document.querySelector('[data-days]');
 const hours = document.querySelector('[data-hours]');
 const minutes = document.querySelector('[data-minutes]');
@@ -24,8 +18,7 @@ const options = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    if (selectedDates[0].getTime() <= Date.now()) {
-      buttonStart.disabled = true;
+    if (selectedDates[0] < Date.now()) {
       iziToast.error({
         message: 'Please choose a date in the future',
         position: 'topCenter',
@@ -40,11 +33,9 @@ const options = {
         transitionIn: 'fadeIn',
         transitionOut: 'fadeOut',
       });
-      return;
     } else {
       buttonStart.disabled = false;
-      iziToast.destroy();
-      return (userSelectedDate = selectedDates[0].getTime());
+      userSelectedDate = selectedDates[0].getTime();
     }
   },
 };
